@@ -14,14 +14,4 @@
 		<property name="ipAddress" value="127.0.0.1"></property>
 		<property name="className" value="com.mysql.jdbc.Driver"></property>
 	</bean>
-	<bean id="bookconnection" class="com.mani.theatre.utilities.ConnectionManager"
-		init-method="createConnection" scope="prototype">
-		<property name="port" value="3306"></property>
-		<property name="userName" value="root"></property>
-		<property name="password" value="root"></property>
-		<property name="ipAddress" value="127.0.0.1"></property>
-		<property name="className" value="com.mysql.jdbc.Driver"></property>
-	</bean>
-
-
 </beans>

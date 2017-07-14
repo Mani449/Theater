@@ -151,7 +151,7 @@ public class BookTicketsDAO {
 
 	public int bookSeats(int seats, int screen) {
 
-		Connection conn = ConnectionHandler.create();
+		Connection conn =  ConnectionHandler.getConnection();
 		try {
 			conn.setAutoCommit(false);
 			Statement st = conn.createStatement();
@@ -191,7 +191,7 @@ public class BookTicketsDAO {
 	}
 
 	public boolean finalizeTransaction(List<Integer> seats,int reservation_id, int screen) {
-		Connection conn = ConnectionHandler.create();
+		Connection conn =  ConnectionHandler.getConnection();
 		synchronized (conn) {
 
 			try {
@@ -254,7 +254,7 @@ public class BookTicketsDAO {
 	}
 
 	public float getCostReservation(int reservationid) {
-		Connection conn = ConnectionHandler.create();
+		Connection conn =  ConnectionHandler.getConnection();
 		synchronized (conn) {
 			try {
 				Statement st = conn.createStatement();

@@ -6,7 +6,6 @@ import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import java.sql.Statement;
 
 import com.mani.theatre.beans.PayPalBean;
 import com.mani.theatre.utilities.ConnectionHandler;
@@ -33,9 +32,12 @@ public class PayPalDAO {
 	{
 		Connection conn=ConnectionHandler.getConnection();
 		try {
-			Statement st=conn.createStatement();
+			PreparedStatement pst=conn.prepareStatement("INSERT INTO `rt`.`paypal` (`userid`,`password`,`balance`) VALUES (?,?,?)");
 			System.out.println(hashPassword(bean.getPassword()));
-			if(st.executeUpdate("INSERT INTO `rt`.`paypal` (`userid`,`password`,`balance`) VALUES ('"+bean.getUserName()+"','"+hashPassword(bean.getPassword())+"',"+bean.getBalance()+")")!=0)
+			pst.setString(1, bean.getUserName());
+			pst.setString(2,hashPassword(bean.getPassword()));
+			pst.setFloat(3, bean.getBalance());
+			if(pst.executeUpdate()!=0)
 			{
 				return true;
 			}
