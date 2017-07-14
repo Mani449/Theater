@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -55,12 +56,14 @@ public class PayPalDAO {
 	public boolean validatePayPalAndPay(PayPalBean bean)
 	{
 		Connection conn=ConnectionHandler.getConnection();
-		Statement st;
+		PreparedStatement pst;
 		try {
-			st = conn.createStatement();
-			System.out.println("SQL command:::: select true from rt.paypal where userid='"+bean.getUserName()+"' and password='"+hashPassword(bean.getPassword())+"' and balance >= "+bean.getBalance());
-			if(st.executeQuery("select true from rt.paypal where userid='"+bean.getUserName()+"' and password='"+hashPassword(bean.getPassword())+"' and balance >= "+bean.getBalance()).next())
-				if(st.executeUpdate("update rt.paypal set balance=balance-"+bean.getBalance()+" where userid='"+bean.getUserName()+"'")!=0)
+			pst = conn.prepareStatement("select true from rt.paypal where userid=? and password= ? and balance >= ?");
+			pst.setString(1, bean.getUserName());
+			pst.setString(2, hashPassword(bean.getPassword()));
+			pst.setFloat(3, bean.getBalance());
+			if(pst.executeQuery().next())
+				if(pst.executeUpdate("update rt.paypal set balance=balance-"+bean.getBalance()+" where userid='"+bean.getUserName()+"'")!=0)
 					return true;
 		} catch (SQLException e) {
 			e.printStackTrace();
